@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - Lista</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">📦 Cadastro de Produtos</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="produtos.html" class="active">Produtos</a></li>
+                <li><a href="cadastro.html">Novo Produto</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="page-header">
+            <h1>Lista de Produtos</h1>
+            <a href="cadastro.html" class="btn btn-primary">+ Novo Produto</a>
+        </section>
+
+        <div id="loading" class="loader">Carregando produtos...</div>
+        
+        <div id="error" class="alert alert-danger" style="display: none;"></div>
+
+        <div id="produtos-container" class="produtos-grid">
+            <!-- Os produtos serão carregados aqui via JavaScript -->
+        </div>
+
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <p>Nenhum produto cadastrado ainda</p>
+            <a href="cadastro.html" class="btn btn-primary">Cadastre um produto</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sistema de Cadastro de Produtos. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/produtos.js"></script>
+</body>
+</html>
