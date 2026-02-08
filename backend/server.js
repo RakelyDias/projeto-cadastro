@@ -27,7 +27,7 @@ app.get('/api/produtos', async (req, res) => {
   try {
     const connection = await pool.getConnection();
     const [produtos] = await connection.query(
-      'SELECT id, nome, descricao, preco, quantidade FROM produtos ORDER BY id DESC'
+      'SELECT id, nome, descricao, preco, quantidade FROM produtos_rakely ORDER BY id DESC'
     );
     connection.release();
     
@@ -68,7 +68,7 @@ app.post('/api/produtos', async (req, res) => {
 
     const connection = await pool.getConnection();
     const [resultado] = await connection.query(
-      'INSERT INTO produtos (nome, descricao, preco, quantidade, data_criacao) VALUES (?, ?, ?, ?, NOW())',
+      'INSERT INTO produtos_rakely (nome, descricao, preco, quantidade, data_criacao) VALUES (?, ?, ?, ?, NOW())',
       [nome, descricao, parseFloat(preco), parseInt(quantidade)]
     );
     connection.release();
