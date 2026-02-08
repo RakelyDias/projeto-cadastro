@@ -1,106 +1,114 @@
-<!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
-- [ ] Verify that the copilot-instructions.md file in the .github directory is created.
+# Sistema de Cadastro de Produtos
 
-- [ ] Clarify Project Requirements
-	<!-- Ask for project type, language, and frameworks if not specified. Skip if already provided. -->
+## 🎯 Visão Geral do Projeto
 
-- [ ] Scaffold the Project
-	<!--
-	Ensure that the previous step has been marked as completed.
-	Call project setup tool with projectType parameter.
-	Run scaffolding command to create project files and folders.
-	Use '.' as the working directory.
-	If no appropriate projectType is available, search documentation using available tools.
-	Otherwise, create the project structure manually using available file creation tools.
-	-->
+Sistema completo e funcional para cadastro e gerenciamento de produtos com frontend HTML/CSS/JavaScript e backend Node.js/Express.
 
-- [ ] Customize the Project
-	<!--
-	Verify that all previous steps have been completed successfully and you have marked the step as completed.
-	Develop a plan to modify codebase according to user requirements.
-	Apply modifications using appropriate tools and user-provided references.
-	Skip this step for "Hello World" projects.
-	-->
+## ✅ Status Geral
 
-- [ ] Install Required Extensions
-	<!-- ONLY install extensions provided mentioned in the get_project_setup_info. Skip this step otherwise and mark as completed. -->
+- [x] Verificação do arquivo copilot-instructions.md
+- [x] Requisitos do projeto esclarecidos
+- [x] Projeto estruturado (frontend + backend)
+- [x] Frontend customizado com 3 páginas
+- [x] Backend com 2 rotas API
+- [x] Banco de dados SQL configurado
+- [x] Dependências instaladas
+- [x] Tudo funcionando
 
-- [ ] Compile the Project
-	<!--
-	Verify that all previous steps have been completed.
-	Install any missing dependencies.
-	Run diagnostics and resolve any issues.
-	Check for markdown files in project folder for relevant instructions on how to do this.
-	-->
+## 📦 O que foi criado
 
-- [ ] Create and Run Task
-	<!--
-	Verify that all previous steps have been completed.
-	Check https://code.visualstudio.com/docs/debugtest/tasks to determine if the project needs a task. If so, use the create_and_run_task to create and launch a task based on package.json, README.md, and project structure.
-	Skip this step otherwise.
-	 -->
+### Frontend (3 páginas)
+1. **index.html** - Página inicial com apresentação
+2. **produtos.html** - Lista de produtos
+3. **cadastro.html** - Formulário para cadastrar
+4. **sobre.html** - Informações sobre o projeto
 
-- [ ] Launch the Project
-	<!--
-	Verify that all previous steps have been completed.
-	Prompt user for debug mode, launch only if confirmed.
-	 -->
+### Backend (2 rotas)
+- `GET /api/produtos` - Retorna lista de produtos
+- `POST /api/produtos` - Cadastra novo produto
 
-- [ ] Ensure Documentation is Complete
-	<!--
-	Verify that all previous steps have been completed.
-	Verify that README.md and the copilot-instructions.md file in the .github directory exists and contains current project information.
-	Clean up the copilot-instructions.md file in the .github directory by removing all HTML comments.
-	 -->
+### Banco de Dados
+- Tabela `produtos` no banco `web_03mb`
+- Campos: id, nome, descricao, preco, quantidade, data_criacao
 
-<!--
-## Execution Guidelines
-PROGRESS TRACKING:
-- If any tools are available to manage the above todo list, use it to track progress through this checklist.
-- After completing each step, mark it complete and add a summary.
-- Read current todo list status before starting each new step.
+## 🚀 Como Executar
 
-COMMUNICATION RULES:
-- Avoid verbose explanations or printing full command outputs.
-- If a step is skipped, state that briefly (e.g. "No extensions needed").
-- Do not explain project structure unless asked.
-- Keep explanations concise and focused.
+### 1. Criar Banco de Dados
+```sql
+CREATE DATABASE web_03mb;
+USE web_03mb;
 
-DEVELOPMENT RULES:
-- Use '.' as the working directory unless user specifies otherwise.
-- Avoid adding media or external links unless explicitly requested.
-- Use placeholders only with a note that they should be replaced.
-- Use VS Code API tool only for VS Code extension projects.
-- Once the project is created, it is already opened in Visual Studio Code—do not suggest commands to open this project in Visual Studio again.
-- If the project setup information has additional rules, follow them strictly.
+CREATE TABLE produtos (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  descricao TEXT NOT NULL,
+  preco DECIMAL(10, 2) NOT NULL,
+  quantidade INT NOT NULL,
+  data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY (nome)
+);
+```
 
-FOLDER CREATION RULES:
-- Always use the current directory as the project root.
-- If you are running any terminal commands, use the '.' argument to ensure that the current working directory is used ALWAYS.
-- Do not create a new folder unless the user explicitly requests it besides a .vscode folder for a tasks.json file.
-- If any of the scaffolding commands mention that the folder name is not correct, let the user know to create a new folder with the correct name and then reopen it again in vscode.
+### 2. Iniciar Backend
+```bash
+cd backend
+npm install  # Se ainda não instalou
+npm start
+```
 
-EXTENSION INSTALLATION RULES:
-- Only install extension specified by the get_project_setup_info. Skip this step otherwise and DO NOT INSTALL any other extensions.
+O servidor rodará em `http://localhost:3001`
 
-PROJECT CONTENT RULES:
-- If the user has not specified project details, assume they want a "Hello World" project as a starting point.
-- Avoid adding links of any type (URLs, files, folders, etc.) or integrations that are not explicitly required.
-- Avoid generating images, videos, or any other media files unless explicitly requested.
-- If you need to use any media assets as placeholders, let the user know that these are placeholders and should be replaced with the actual assets later.
-- Ensure all generated components serve a clear purpose within the user's requested workflow.
-- If a feature is assumed but not confirmed, prompt the user for clarification before including it.
-- If you are working on a VS Code extension, use the VS Code API tool with a query to find relevant VS Code API references and samples related to that query.
+### 3. Abrir Frontend
+- Use Live Server extension no VS Code, ou
+- Abra `frontend/index.html` no navegador
 
-TASK COMPLETION RULES:
-- Your task is complete when:
-  - Project is successfully scaffolded and compiled without errors
-  - copilot-instructions.md file in the .github directory exists in the project
-  - README.md file exists and is up to date
-  - User is provided with clear instructions to debug/launch the project
+## 📋 Verificação de Funcionamento
 
-Before starting a new task in the above plan, update progress in the plan.
--->
-- Work through each checklist item systematically.
-- Keep communication concise and focused.
-- Follow development best practices.
+1. ✅ **GET /api/produtos** - Testa listagem
+   - Abra: http://localhost:3001/api/produtos
+
+2. ✅ **POST /api/produtos** - Testa cadastro
+   - Use a página de cadastro no frontend
+
+3. ✅ **CORS ativado** - Comunicação frontend-backend funcionando
+
+## 📁 Estrutura Final
+
+```
+projetoIA/
+├── frontend/           # Páginas HTML, CSS, JS
+│   ├── index.html
+│   ├── produtos.html
+│   ├── cadastro.html
+│   ├── sobre.html
+│   ├── css/style.css
+│   └── js/
+├── backend/            # Servidor Node.js/Express
+│   ├── server.js
+│   ├── package.json
+│   ├── .env
+│   ├── database.sql
+│   └── node_modules/
+├── README.md           # Documentação completa
+├── INSTALACAO.md       # Guia de execução
+└── .gitignore
+```
+
+## 🔗 GitHub
+
+Para enviar para GitHub:
+
+```bash
+git remote add origin https://github.com/seu-usuario/seu-repositorio.git
+git branch -M main
+git push -u origin main
+```
+
+Todos os arquivos já estão versionados e prontos para push!
+
+## 📝 Arquivos Importantes
+
+- [README.md](README.md) - Documentação completa
+- [INSTALACAO.md](INSTALACAO.md) - Guia passo a passo
+- [backend/database.sql](backend/database.sql) - Script SQL
+- [backend/.env](backend/.env) - Configurações (EDITAR COM SUAS CREDENCIAIS)
