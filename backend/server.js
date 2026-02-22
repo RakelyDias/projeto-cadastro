@@ -88,6 +88,46 @@ app.post('/api/produtos', async (req, res) => {
   }
 });
 
+// Rota para deletar um produto
+app.delete('/api/produtos/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id || isNaN(id)) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: 'ID do produto inválido'
+      });
+    }
+
+    const connection = await pool.getConnection();
+    const [resultado] = await connection.query(
+      'DELETE FROM produtos_rakely WHERE id = ?',
+      [parseInt(id)]
+    );
+    connection.release();
+
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: 'Produto não encontrado'
+      });
+    }
+
+    res.json({
+      sucesso: true,
+      mensagem: 'Produto deletado com sucesso'
+    });
+  } catch (erro) {
+    console.error('Erro ao deletar produto:', erro);
+    res.status(500).json({
+      sucesso: false,
+      mensagem: 'Erro ao deletar produto',
+      erro: erro.message
+    });
+  }
+});
+
 // Rota de teste
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Servidor rodando' });

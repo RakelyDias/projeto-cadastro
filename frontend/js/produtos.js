@@ -50,6 +50,48 @@ async function carregarProdutos() {
     }
 }
 
+async function deletarProduto(id, cardElement) {
+    if (!confirm('Tem certeza que deseja deletar este produto?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/produtos/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro ao deletar: ${response.statusText}`);
+        }
+
+        const dados = await response.json();
+        if (!dados.sucesso) {
+            throw new Error(dados.mensagem || 'Erro ao deletar produto');
+        }
+
+        // Remover o card do DOM com animação suave
+        cardElement.style.opacity = '0';
+        cardElement.style.transform = 'scale(0.95)';
+        cardElement.style.transition = 'all 0.3s ease';
+        
+        setTimeout(() => {
+            cardElement.remove();
+        }, 300);
+
+        alert('Produto deletado com sucesso!');
+
+        // Se não há mais produtos, mostrar empty state
+        const container = document.getElementById('produtos-container');
+        if (container.children.length === 0) {
+            document.getElementById('empty-state').style.display = 'block';
+        }
+
+    } catch (err) {
+        console.error('Erro:', err);
+        alert(`Erro ao deletar produto: ${err.message}`);
+    }
+}
+
 function criarCardProduto(produto) {
     const card = document.createElement('div');
     card.className = 'produto-card';
@@ -70,7 +112,14 @@ function criarCardProduto(produto) {
         <div class="produto-data">
             Cadastrado em: ${dataFormatada}
         </div>
+        <div class="produto-acoes">
+            <button class="btn btn-danger btn-delete" data-id="${produto.id}">🗑️ Excluir</button>
+        </div>
     `;
+
+    // Adicionar event listener para o botão de deletar
+    const btnDelete = card.querySelector('.btn-delete');
+    btnDelete.addEventListener('click', () => deletarProduto(produto.id, card));
 
     return card;
 }
