@@ -113,6 +113,7 @@ function criarCardProduto(produto) {
             Cadastrado em: ${dataFormatada}
         </div>
         <div class="produto-acoes">
+            <a href="editar-produto.html?id=${produto.id}" class="btn btn-info">✏️ Editar</a>
             <button class="btn btn-danger btn-delete" data-id="${produto.id}">🗑️ Excluir</button>
         </div>
     `;

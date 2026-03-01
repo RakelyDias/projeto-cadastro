@@ -88,6 +88,102 @@ app.post('/api/produtos', async (req, res) => {
   }
 });
 
+// Rota para buscar um produto específico
+app.get('/api/produtos/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id || isNaN(id)) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: 'ID do produto inválido'
+      });
+    }
+
+    const connection = await pool.getConnection();
+    const [produtos] = await connection.query(
+      'SELECT id, nome, descricao, preco, quantidade FROM produtos_rakely WHERE id = ?',
+      [parseInt(id)]
+    );
+    connection.release();
+
+    if (produtos.length === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: 'Produto não encontrado'
+      });
+    }
+
+    res.json({
+      sucesso: true,
+      dados: produtos[0]
+    });
+  } catch (erro) {
+    console.error('Erro ao buscar produto:', erro);
+    res.status(500).json({
+      sucesso: false,
+      mensagem: 'Erro ao buscar produto',
+      erro: erro.message
+    });
+  }
+});
+
+// Rota para atualizar um produto (PUT)
+app.put('/api/produtos/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nome, descricao, preco, quantidade } = req.body;
+
+    // Validação básica
+    if (!id || isNaN(id)) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: 'ID do produto inválido'
+      });
+    }
+
+    if (!nome || !descricao || !preco || !quantidade) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: 'Todos os campos são obrigatórios'
+      });
+    }
+
+    if (isNaN(preco) || isNaN(quantidade) || preco < 0 || quantidade < 0) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: 'Preço e quantidade devem ser números válidos'
+      });
+    }
+
+    const connection = await pool.getConnection();
+    const [resultado] = await connection.query(
+      'UPDATE produtos_rakely SET nome = ?, descricao = ?, preco = ?, quantidade = ? WHERE id = ?',
+      [nome, descricao, parseFloat(preco), parseInt(quantidade), parseInt(id)]
+    );
+    connection.release();
+
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: 'Produto não encontrado'
+      });
+    }
+
+    res.json({
+      sucesso: true,
+      mensagem: 'Produto atualizado com sucesso'
+    });
+  } catch (erro) {
+    console.error('Erro ao atualizar produto:', erro);
+    res.status(500).json({
+      sucesso: false,
+      mensagem: 'Erro ao atualizar produto',
+      erro: erro.message
+    });
+  }
+});
+
 // Rota para deletar um produto
 app.delete('/api/produtos/:id', async (req, res) => {
   try {
